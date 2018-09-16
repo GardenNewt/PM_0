@@ -119,7 +119,7 @@ void dumpInstructions(FILE* out, Instruction* ins, int numOfIns)
 * */
 int getBasePointer(int *stack, int currentBP, int L)
 {
-	// TODO
+	
 	int B1;
 	B1 = currentBP;
 	while (L > 0) {
