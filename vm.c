@@ -120,6 +120,13 @@ void dumpInstructions(FILE* out, Instruction* ins, int numOfIns)
 int getBasePointer(int *stack, int currentBP, int L)
 {
 	// TODO
+	int B1;
+	B1 = currentBP;
+	while (L > 0) {
+		B1 = stack[B1 + 1];
+		L--;
+	}
+	return B1;
 }
 
 // Function that dumps the whole stack into output file
@@ -167,6 +174,7 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 	switch (ins.op)
 	{
 		// TODO
+
 	default:
 		fprintf(stderr, "Illegal instruction?");
 		return HALT;
