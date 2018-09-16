@@ -55,6 +55,21 @@ void initVM(VirtualMachine* vm)
 	if (vm)
 	{
 		// TODO
+		vm->BP = 1;
+		vm->SP = 0;
+		vm->PC = 0;
+		vm->IR = 0;
+
+		/**
+		* register file
+		* */
+		for (int i = 0; i < REGISTER_FILE_REG_COUNT; i++)
+			vm->RF[i] = 0;
+
+		/**
+		* stack
+		* */
+		memset(vm->stack,0,MAX_STACK_HEIGHT*sizeof(int));
 	}
 }
 
