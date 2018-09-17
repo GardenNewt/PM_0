@@ -174,7 +174,69 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 	switch (ins.op)
 	{
 		// TODO
+	case 1: //"lit"
+		vm->RF[ins.r] = ins.m;
+		break;
+	case 2: //"rtn"
+		vm->SP = vm->BP + 1;
+		vm->BP = vm->stack[vm->SP + 3];
+		vm->PC = vm->stack[vm->SP + 4];
+		break;
+	case 3: //"lod"
+		vm->RF[ins.r] = vm->stack[getBasePointer(vm->stack, vm->BP, ins.l) + ins.m];
+		break;
+	case 4: //"sto"
+		vm->stack[getBasePointer(vm->stack, vm->BP, ins.l) + ins.m] = vm->RF[ins.r];
+		break;
+	case 5: //"cal"
+		vm->stack[vm->SP + 1] = 0;
+		vm->stack[vm->SP + 2] = getBasePointer(vm->stack, vm->BP, ins.l);
+		vm->stack[vm->SP + 3] = vm->BP;
+		vm->stack[vm->SP + 4] = vm->PC;
+		vm->BP = vm->SP + 1;
+		vm->PC = ins.m;
+		break;
+	case 6: //"inc"
+		vm->SP = vm->SP + ins.m;
+		break;
+	case 7: //"jmp"
+		vm->PC = ins.m;
+		break;
+	case 8: //"jpc"
 
+		break;
+	case 9: //"sio"
+		break;
+	case 10: //"sio"
+		break;
+	case 11: //"sio"
+		break;
+	case 12: //"neg"
+		break;
+	case 13: //"add"
+		break;
+	case 14: //"sub"
+		break;
+	case 15: //"mul"
+		break;
+	case 16: //"div"
+		break;
+	case 17: //"odd"
+		break;
+	case 18: //"mod"
+		break;
+	case 19: //"eql"
+		break;
+	case 20: //"neq"
+		break;
+	case 21: //"lss"
+		break;
+	case 22: //"leq"
+		break;
+	case 23: //"gtr"
+		break;
+	case 24: //"geq"
+		break;
 	default:
 		fprintf(stderr, "Illegal instruction?");
 		return HALT;
@@ -182,7 +244,8 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 
 	return CONT;
 }
-
+/*"illegal", // opcode 0 is illegal
+	"lit", "rtn", "lod", "sto", "cal","inc", "jmp", "jpc", "sio", "sio","sio", "neg", "add", "sub", "mul","div", "odd", "mod", "eql", "neq","lss", "leq", "gtr", "geq"*/
 /**
 * inp: The FILE pointer containing the list of instructions to
 *         be loaded to code memory of the virtual machine.
@@ -235,7 +298,7 @@ void simulateVM(
 	{
 		// Fetch
 		// TODO
-		vm->IR = vm->PC;
+		vm->IR = ins[vm->PC].;
 
 		// Advance PC - before execution!
 		// TODO
