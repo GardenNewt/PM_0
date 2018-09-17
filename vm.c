@@ -212,7 +212,7 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 		break;
 	case 10: //"sio"
 		printf("\nPlease type an integer to store to a register. Press enter when finished\n");
-		fscanf(vmIn, "%d\n", &vm->RF[ins.r]);
+		scanf(vmIn, "%d", &vm->RF[ins.r]);
 		break;
 	case 11: //"sio"
 		return HALT;
