@@ -119,7 +119,6 @@ void dumpInstructions(FILE* out, Instruction* ins, int numOfIns)
 * */
 int getBasePointer(int *stack, int currentBP, int L)
 {
-	
 	int B1;
 	B1 = currentBP;
 	while (L > 0) {
@@ -242,14 +241,19 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 		vm->RF[ins.r] = vm->RF[ins.l] == vm->RF[ins.m];
 		break;
 	case 20: //"neq"
+		vm->RF[ins.r] = vm->RF[ins.l] != vm->RF[ins.m];
 		break;
 	case 21: //"lss"
+		vm->RF[ins.r] = vm->RF[ins.l] < vm->RF[ins.m];
 		break;
 	case 22: //"leq"
+		vm->RF[ins.r] = vm->RF[ins.l] <= vm->RF[ins.m];
 		break;
 	case 23: //"gtr"
+		vm->RF[ins.r] = vm->RF[ins.l] > vm->RF[ins.m];
 		break;
 	case 24: //"geq"
+		vm->RF[ins.r] = vm->RF[ins.l] >= vm->RF[ins.m];
 		break;
 	default:
 		fprintf(stderr, "Illegal instruction?");
@@ -258,8 +262,7 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 
 	return CONT;
 }
-/*"illegal", // opcode 0 is illegal
-	"lit", "rtn", "lod", "sto", "cal","inc", "jmp", "jpc", "sio", "sio","sio", "neg", "add", "sub", "mul","div", "odd", "mod", "eql", "neq","lss", "leq", "gtr", "geq"*/
+
 /**
 * inp: The FILE pointer containing the list of instructions to
 *         be loaded to code memory of the virtual machine.
@@ -282,13 +285,15 @@ void simulateVM(
 	FILE* vm_outp)	
 {
 	int ret;
-	Instruction *ins = calloc(100, sizeof(Instruction));
+	int numOfIns;
+	Instruction ins[MAX_CODE_LENGTH] = { 0 };
 	// Read instructions from file
 	// TODO
-	readInstructions(inp, ins);
+	numOfIns = readInstructions(inp, ins);
 
 	// Dump instructions to the output file
 	// TODO
+	dumpInstructions(outp, ins,numOfIns);
 
 	// Before starting the code execution on the virtual machine,
 	// .. write the header for the simulation part (***Execution***)
@@ -301,25 +306,26 @@ void simulateVM(
 
 	// Create a virtual machine
 	// TODO
-	VirtualMachine *vm = malloc(sizeof(VirtualMachine));
+	VirtualMachine vm;
 
 	// Initialize the virtual machine
 	// TODO
-	initVM(vm);
+	initVM(&vm);
 
 	// Fetch&Execute the instructions on the virtual machine until halting
 	while (1 /* TODO: Until halt is signalled.. */)
 	{
 		// Fetch
 		// TODO
-		vm->IR = ins[vm->PC].;
+		vm.IR = vm.PC;
 
 		// Advance PC - before execution!
 		// TODO
-		vm->PC++;
+		vm.PC++;
+
 		// Execute the instruction
 		// TODO
-		ret = executeInstruction(vm, ins[vm->IR], vm_inp, vm_outp);
+		ret = executeInstruction(&vm, ins[vm.IR], vm_inp, vm_outp);
 		if (ret == HALT) {
 			break;
 		}
@@ -327,13 +333,13 @@ void simulateVM(
 		// TODO: Following is a possible way of printing the current state
 		// .. where instrBeingExecuted is the address of the instruction at vm
 		// ..  memory and instr is the instruction being executed.
-		 /*fprintf(
+		 fprintf(
 		outp,
 		"%3d %3s %3d %3d %3d %3d %3d %3d ",
-		instrBeingExecuted, // place of instruction at memory
-		opcodes[instr.op], instr.r, instr.l, instr.m, // instruction info
+		vm.IR, // place of instruction at memory
+		opcodes[ins[vm.IR].op], ins[vm.IR].r, ins[vm.IR].l, ins[vm.IR].m, // instruction info
 		vm.PC, vm.BP, vm.SP // vm info
-		);*/
+		);
 
 		// Print stack info
 		// TODO
