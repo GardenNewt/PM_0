@@ -203,29 +203,43 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 		vm->PC = ins.m;
 		break;
 	case 8: //"jpc"
-
+		if (vm->RF[ins.r] == 0) {
+			vm->PC = ins.m;
+		}
 		break;
 	case 9: //"sio"
+		fprintf(vmOut, "\nRF[%d] = %d\n", ins.r, vm->RF[ins.r]);
 		break;
 	case 10: //"sio"
+		printf("\nPlease type an integer to store to a register. Press enter when finished\n");
+		fscanf(vmIn, "%d\n", &vm->RF[ins.r]);
 		break;
 	case 11: //"sio"
+		return HALT;
 		break;
 	case 12: //"neg"
+		vm->RF[ins.r] = -vm->RF[ins.l];
 		break;
 	case 13: //"add"
+		vm->RF[ins.r] = vm->RF[ins.l] + vm->RF[ins.m];
 		break;
 	case 14: //"sub"
+		vm->RF[ins.r] = vm->RF[ins.l] - vm->RF[ins.m];
 		break;
 	case 15: //"mul"
+		vm->RF[ins.r] = vm->RF[ins.l] * vm->RF[ins.m];
 		break;
 	case 16: //"div"
+		vm->RF[ins.r] = vm->RF[ins.l] / vm->RF[ins.m];
 		break;
 	case 17: //"odd"
+		vm->RF[ins.r] = vm->RF[ins.l] % 2;
 		break;
 	case 18: //"mod"
+		vm->RF[ins.r] = vm->RF[ins.l] % vm->RF[ins.m];
 		break;
 	case 19: //"eql"
+		vm->RF[ins.r] = vm->RF[ins.l] == vm->RF[ins.m];
 		break;
 	case 20: //"neq"
 		break;
