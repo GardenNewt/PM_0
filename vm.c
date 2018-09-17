@@ -215,7 +215,6 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 		break;
 	case 11: //"sio"
 		return HALT;
-		break;
 	case 12: //"neg"
 		vm->RF[ins.r] = -vm->RF[ins.l];
 		break;
@@ -284,7 +283,7 @@ void simulateVM(
 	FILE* vm_inp,
 	FILE* vm_outp)	
 {
-	int ret;
+	int todoNext;
 	int numOfIns;
 	Instruction ins[MAX_CODE_LENGTH] = { 0 };
 	// Read instructions from file
@@ -325,10 +324,7 @@ void simulateVM(
 
 		// Execute the instruction
 		// TODO
-		ret = executeInstruction(&vm, ins[vm.IR], vm_inp, vm_outp);
-		if (ret == HALT) {
-			break;
-		}
+		todoNext = executeInstruction(&vm, ins[vm.IR], vm_inp, vm_outp);
 		// Print current state
 		// TODO: Following is a possible way of printing the current state
 		// .. where instrBeingExecuted is the address of the instruction at vm
@@ -345,6 +341,10 @@ void simulateVM(
 		// TODO
 
 		fprintf(outp, "\n");
+
+		if (todoNext == HALT) {
+			break;
+		}
 	}
 
 	// Above loop ends when machine halts. Therefore, dump halt message.
