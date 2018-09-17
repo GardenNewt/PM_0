@@ -212,7 +212,7 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 		break;
 	case 10: //"sio"
 		printf("\nPlease type an integer to store to a register. Press enter when finished\n");
-		scanf(vmIn, "%d", &vm->RF[ins.r]);
+		fscanf(vmIn, "%d", &vm->RF[ins.r]);
 		break;
 	case 11: //"sio"
 		return HALT;
@@ -332,7 +332,7 @@ void simulateVM(
 		// ..  memory and instr is the instruction being executed.
 		 fprintf(
 		outp,
-		"%3d %3s %3d %3d %3d %3d %3d %3d",
+		"%3d %3s %3d %3d %3d %3d %3d %3d ",
 		vm.IR, // place of instruction at memory
 		opcodes[ins[vm.IR].op], ins[vm.IR].r, ins[vm.IR].l, ins[vm.IR].m, // instruction info
 		vm.PC, vm.BP, vm.SP //vm.stack[vm.SP] // vm info
