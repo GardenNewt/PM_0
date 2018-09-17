@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "vm.h"
 #include "data.h"
 
@@ -177,7 +178,7 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 		vm->RF[ins.r] = ins.m;
 		break;
 	case 2: //"rtn"
-		vm->SP = vm->BP + 1;
+		vm->SP = vm->BP - 1;
 		vm->BP = vm->stack[vm->SP + 3];
 		vm->PC = vm->stack[vm->SP + 4];
 		break;
@@ -331,18 +332,18 @@ void simulateVM(
 		// ..  memory and instr is the instruction being executed.
 		 fprintf(
 		outp,
-		"%3d %3s %3d %3d %3d %3d %3d %3d ",
+		"%3d %3s %3d %3d %3d %3d %3d %3d",
 		vm.IR, // place of instruction at memory
 		opcodes[ins[vm.IR].op], ins[vm.IR].r, ins[vm.IR].l, ins[vm.IR].m, // instruction info
-		vm.PC, vm.BP, vm.SP // vm info
+		vm.PC, vm.BP, vm.SP //vm.stack[vm.SP] // vm info
 		);
 
 		// Print stack info
 		// TODO
-
+		dumpStack(outp, vm.stack, vm.SP, vm.BP);
 		fprintf(outp, "\n");
 
-		if (todoNext == HALT) {
+		if (todoNext == HALT || vm.PC == 0 || vm.PC==numOfIns) {
 			break;
 		}
 	}
