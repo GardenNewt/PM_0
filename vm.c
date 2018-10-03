@@ -208,7 +208,7 @@ int executeInstruction(VirtualMachine* vm, Instruction ins, FILE* vmIn, FILE* vm
 		}
 		break;
 	case 9: //"sio"
-		fprintf(vmOut, "\nRF[%d] = %d\n", ins.r, vm->RF[ins.r]);
+		fprintf(vmOut, "%d ", vm->RF[ins.r]);
 		break;
 	case 10: //"sio"
 		printf("\nPlease type an integer to store to a register. Press enter when finished\n");
